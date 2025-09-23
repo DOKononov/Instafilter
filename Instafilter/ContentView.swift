@@ -6,37 +6,19 @@
 //
 
 import SwiftUI
-import PhotosUI
 
 struct ContentView: View {
-    @State private var pickerItems: [PhotosPickerItem] = []
-    @State private var selectedImages:  [Image] = []
-    
-    var body: some View {
-        VStack {
-            PhotosPicker(selection: $pickerItems, maxSelectionCount: 3, matching: .any(of: [.images, .not(.screenshots)])) {
-                Label("Select picture", systemImage: "photo")
-            }
-            ScrollView {
-                ForEach(0..<selectedImages.count, id: \.self) { i in
-                    selectedImages[i]
-                        .resizable()
-                        .scaledToFit()
-                }
-            }
-        }
-        .onChange(of: pickerItems) {
-            Task {
-                selectedImages.removeAll()
-                for item in pickerItems {
-                    if let loadedImage = try await item.loadTransferable(type: Image.self) {
-                        selectedImages.append(loadedImage)
-                    }
-                }
 
-            }
+    var body: some View {
+        let example = Image(.example)
+        ShareLink(item: example, preview: SharePreview("Image to share", image: example)) {
+            Label("Share me...", systemImage: "swift")
         }
-        
+//        ShareLink(
+//            item: URL( string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!,
+//            subject: Text("Best free course of SwiftUI"),
+//            message: Text("Without registration and sms")
+//        )
     }
 }
 
